@@ -1,0 +1,15 @@
+project-website/
+├── index.html          ← HTML only, no logic
+├── style.css           ← All styling
+└── js/
+    ├── data_store.js       ← Layer 1: Data (localStorage CRUD)
+    ├── services.js         ← Layer 2: Business Logic (auth, seats, CRUD rules)
+    ├── ui_utils.js         ← Layer 3: Shared UI helpers (toast, modal, confirm)
+    ├── app.js              ← Layer 5: App Controller (navigation, session)
+    └── views/
+        ├── login_view.js
+        ├── main_view.js       ← Dashboard
+        ├── train_view.js
+        ├── schedule_view.js
+        ├── reservation_view.js
+        └── password_view.js
