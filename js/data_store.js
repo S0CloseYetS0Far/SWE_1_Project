@@ -15,13 +15,13 @@ const DataStore = {
   ],
 
   DEFAULT_SCHEDULES: [
-    { id: 1, trainId: 1, route: 'KAFD - Airport',          departureStation: 'KAFD Station',       arrivalStation: 'Airport Terminal 1',  departureTime: '06:00', arrivalTime: '06:45' },
-    { id: 2, trainId: 1, route: 'KAFD - Airport',          departureStation: 'KAFD Station',       arrivalStation: 'Airport Terminal 1',  departureTime: '09:00', arrivalTime: '09:45' },
-    { id: 3, trainId: 2, route: 'King Fahd Rd - Al Olaya', departureStation: 'King Fahd Road',     arrivalStation: 'Al Olaya Station',    departureTime: '07:00', arrivalTime: '07:30' },
-    { id: 4, trainId: 2, route: 'King Fahd Rd - Al Olaya', departureStation: 'King Fahd Road',     arrivalStation: 'Al Olaya Station',    departureTime: '12:00', arrivalTime: '12:30' },
-    { id: 5, trainId: 3, route: 'Downtown - Al Malaz',     departureStation: 'Al Riyadh Station',  arrivalStation: 'Al Malaz Station',    departureTime: '08:00', arrivalTime: '08:50' },
-    { id: 6, trainId: 4, route: 'Diplomatic Qtr - Uni',    departureStation: 'Diplomatic Quarter', arrivalStation: 'King Saud University', departureTime: '07:30', arrivalTime: '08:00' },
-    { id: 7, trainId: 5, route: 'Al Batha - KKA',          departureStation: 'Al Batha Station',   arrivalStation: 'King Khalid Airport', departureTime: '10:00', arrivalTime: '11:00' },
+    { id: 1, trainId: 1, route: 'KAFD - Airport',          departureStation: 'KAFD Station',       arrivalStation: 'Airport Terminal 1',   departureTime: '06:00', arrivalTime: '06:45', priceAdult: 15 },
+    { id: 2, trainId: 1, route: 'KAFD - Airport',          departureStation: 'KAFD Station',       arrivalStation: 'Airport Terminal 1',   departureTime: '09:00', arrivalTime: '09:45', priceAdult: 15 },
+    { id: 3, trainId: 2, route: 'King Fahd Rd - Al Olaya', departureStation: 'King Fahd Road',     arrivalStation: 'Al Olaya Station',     departureTime: '07:00', arrivalTime: '07:30', priceAdult: 12 },
+    { id: 4, trainId: 2, route: 'King Fahd Rd - Al Olaya', departureStation: 'King Fahd Road',     arrivalStation: 'Al Olaya Station',     departureTime: '12:00', arrivalTime: '12:30', priceAdult: 12 },
+    { id: 5, trainId: 3, route: 'Downtown - Al Malaz',     departureStation: 'Al Riyadh Station',  arrivalStation: 'Al Malaz Station',     departureTime: '08:00', arrivalTime: '08:50', priceAdult: 15 },
+    { id: 6, trainId: 4, route: 'Diplomatic Qtr - Uni',    departureStation: 'Diplomatic Quarter', arrivalStation: 'King Saud University', departureTime: '07:30', arrivalTime: '08:00', priceAdult: 12 },
+    { id: 7, trainId: 5, route: 'Al Batha - KKA',          departureStation: 'Al Batha Station',   arrivalStation: 'King Khalid Airport',  departureTime: '10:00', arrivalTime: '11:00', priceAdult: 20 },
   ],
 
   _idCounter: Date.now(),
