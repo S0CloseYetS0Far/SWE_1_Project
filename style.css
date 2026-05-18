@@ -57,6 +57,9 @@
     .demo-accounts { margin-top: 20px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
     .demo-accounts p { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 8px; }
     .demo-accounts ul { list-style: none; font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+    .auth-switch { margin-top: 14px; font-size: 13px; color: var(--muted); text-align: center; }
+    .auth-switch a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .auth-switch a:hover { text-decoration: underline; }
 
     /* ── FORMS ── */
     .form-group { margin-bottom: 16px; }
@@ -119,6 +122,14 @@
     .modal-title { font-size: 16px; font-weight: 700; }
     .modal-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 20px; line-height: 1; }
     .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+    /* ── PASSENGER LIST (booking modal) ── */
+    .passenger-list { display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto; padding-right: 4px; }
+    .passenger-row { display: flex; align-items: center; gap: 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; }
+    .passenger-row .passenger-label { font-weight: 600; font-size: 13px; min-width: 96px; }
+    .passenger-row .passenger-opt { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; color: var(--muted); }
+    .passenger-row .passenger-opt input { accent-color: var(--primary); }
+    .passenger-row .passenger-opt input:checked + span { color: var(--text); font-weight: 600; }
 
     /* ── CONFIRM DIALOG ── */
     .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 300; align-items: center; justify-content: center; }
