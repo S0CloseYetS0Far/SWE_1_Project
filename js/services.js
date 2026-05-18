@@ -31,6 +31,29 @@ const AuthService = {
 };
 
 
+const PricingService = {
+  CHILD_DISCOUNT: 0.50,
+
+  getChildPrice(adultPrice) {
+    return adultPrice * (1 - this.CHILD_DISCOUNT);
+  },
+
+  getUnitPrice(adultPrice, passengerType) {
+    return passengerType === 'child'
+      ? this.getChildPrice(adultPrice)
+      : adultPrice;
+  },
+
+  calculateTotal(adultPrice, passengerType) {
+    return this.getUnitPrice(adultPrice, passengerType);
+  },
+
+  format(amount) {
+    return amount.toFixed(2) + ' SAR';
+  },
+};
+
+
 const SeatService = {
 
   getAvailableSeatsForSchedule(scheduleId) {
@@ -102,23 +125,25 @@ const ScheduleService = {
     return DataStore.getSchedules();
   },
 
-  add(trainId, route, departureStation, arrivalStation, departureTime, arrivalTime) {
+  add(trainId, route, departureStation, arrivalStation, departureTime, arrivalTime, priceAdult) {
     const schedules = DataStore.getSchedules();
     schedules.push({
       id: DataStore.genId(),
       trainId, route, departureStation, arrivalStation, departureTime, arrivalTime,
+      priceAdult: parseFloat(priceAdult) || 10,
     });
     DataStore.saveSchedules(schedules);
     return { success: true };
   },
 
-  update(id, trainId, route, departureStation, arrivalStation, departureTime, arrivalTime) {
+  update(id, trainId, route, departureStation, arrivalStation, departureTime, arrivalTime, priceAdult) {
     const schedules = DataStore.getSchedules();
     const index = schedules.findIndex(s => s.id === id);
     if (index === -1) return { success: false, error: 'Schedule not found' };
     schedules[index] = {
       ...schedules[index],
       trainId, route, departureStation, arrivalStation, departureTime, arrivalTime,
+      priceAdult: parseFloat(priceAdult) || 10,
     };
     DataStore.saveSchedules(schedules);
     return { success: true };
@@ -142,15 +167,24 @@ const ReservationService = {
     return DataStore.getReservations().filter(r => r.userId === userId);
   },
 
-  book(scheduleId, userId) {
+  book(scheduleId, userId, travelDate, passengerType) {
     if (SeatService.getAvailableSeatsForSchedule(scheduleId) <= 0) {
       return { success: false, error: 'No seats available' };
     }
+    const schedule = DataStore.getSchedules().find(s => s.id === scheduleId);
+    if (!schedule) return { success: false, error: 'Schedule not found' };
+
+    const priceAdult  = schedule.priceAdult || 10;
+    const totalPrice  = PricingService.calculateTotal(priceAdult, passengerType);
+
     const reservations = DataStore.getReservations();
     reservations.push({
       id: DataStore.genId(),
       userId,
       scheduleId,
+      travelDate,
+      passengerType,
+      totalPrice,
       status: 'confirmed',
       createdAt: Date.now(),
     });
