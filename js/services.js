@@ -14,6 +14,33 @@ const AuthService = {
     DataStore.clearSession();
   },
 
+  register(username, password, confirmPassword) {
+    if (!username || username.length < 3) {
+      return { success: false, field: 'username', error: 'Username must be at least 3 characters' };
+    }
+    if (!password || password.length < 8) {
+      return { success: false, field: 'password', error: 'Password must be at least 8 characters' };
+    }
+    if (password !== confirmPassword) {
+      return { success: false, field: 'confirm', error: 'Passwords do not match' };
+    }
+    const users = DataStore.getUsers();
+    if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
+      return { success: false, field: 'username', error: 'Username already taken' };
+    }
+    const newUser = {
+      id: DataStore.genId(),
+      username,
+      password,
+      role: 'client',
+    };
+    users.push(newUser);
+    DataStore.saveUsers(users);
+    const session = { id: newUser.id, username: newUser.username, role: newUser.role };
+    DataStore.saveSession(session);
+    return { success: true, user: session };
+  },
+
   changePassword(userId, currentPassword, newPassword) {
     const users = DataStore.getUsers();
     const user  = users.find(u => u.id === userId);
@@ -168,28 +195,44 @@ const ReservationService = {
   },
 
   book(scheduleId, userId, travelDate, passengerType) {
-    if (SeatService.getAvailableSeatsForSchedule(scheduleId) <= 0) {
-      return { success: false, error: 'No seats available' };
+    const result = this.bookMany(scheduleId, userId, travelDate, [passengerType]);
+    if (!result.success) return result;
+    return { success: true, reservation: result.reservations[0] };
+  },
+
+  bookMany(scheduleId, userId, travelDate, passengerTypes) {
+    if (!Array.isArray(passengerTypes) || passengerTypes.length === 0) {
+      return { success: false, error: 'At least one passenger is required' };
+    }
+    const qty = passengerTypes.length;
+    if (SeatService.getAvailableSeatsForSchedule(scheduleId) < qty) {
+      return { success: false, error: `Only ${SeatService.getAvailableSeatsForSchedule(scheduleId)} seat(s) available` };
     }
     const schedule = DataStore.getSchedules().find(s => s.id === scheduleId);
     if (!schedule) return { success: false, error: 'Schedule not found' };
 
-    const priceAdult  = schedule.priceAdult || 10;
-    const totalPrice  = PricingService.calculateTotal(priceAdult, passengerType);
-
+    const priceAdult   = schedule.priceAdult || 10;
     const reservations = DataStore.getReservations();
-    reservations.push({
-      id: DataStore.genId(),
-      userId,
-      scheduleId,
-      travelDate,
-      passengerType,
-      totalPrice,
-      status: 'confirmed',
-      createdAt: Date.now(),
+    const created      = [];
+
+    passengerTypes.forEach(type => {
+      const totalPrice = PricingService.calculateTotal(priceAdult, type);
+      const r = {
+        id: DataStore.genId(),
+        userId,
+        scheduleId,
+        travelDate,
+        passengerType: type,
+        totalPrice,
+        status: 'confirmed',
+        createdAt: Date.now(),
+      };
+      reservations.push(r);
+      created.push(r);
     });
+
     DataStore.saveReservations(reservations);
-    return { success: true };
+    return { success: true, reservations: created };
   },
 
   cancel(reservationId) {
